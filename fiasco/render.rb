@@ -94,9 +94,9 @@ EOS
       _declare(options) {|e| @templates[name] = e}
     end
 
-    def _render(name, locals = {}, globals = {})
+    def _render(name, locals = {})
       name = name.to_sym
-      variables = _process_locals(name, globals.merge(locals))
+      variables = _process_locals(name, locals)
 
       unless @compiled.include?(name)
         _compile(name, @templates[name], variables)
@@ -107,14 +107,14 @@ EOS
       if @extends
         parent, pargs = @extends
         @extends = nil
-        _render(parent, *pargs, globals)
+        _render(parent, *pargs)
       end
 
       @render_output
     end
 
-    def render(name, locals = {}, globals = {})
-      _render(name, locals, globals)
+    def render(name, locals = {})
+      _render(name, locals)
     ensure
       @content_blocks.clear
       @render_output = nil

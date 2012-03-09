@@ -142,8 +142,12 @@ EOS
     end
 
     def load_macros(options)
+      @render_output = []
       b = binding
-      _declare(options) {|e| e.run(b)}
+      _declare(options) do |e|
+        eval(@compiler.compile(e.body), b, e.filename)
+      end
+      @render_output = nil
     end
   end
 end
